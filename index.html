@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0b0b" />
+  <title>Pam Conde — Motion Portfolio Concept</title>
+  <meta name="description" content="Boceto interactivo de portfolio artístico para Pam Conde." />
+  <style>
+    :root{
+      --bg:#0a0a0a;
+      --ink:#f3efe8;
+      --muted:#a7a19a;
+      --line:rgba(255,255,255,.16);
+      --accent:#b94d63;
+      --pad:clamp(18px,3vw,46px);
+      --serif:Georgia,'Times New Roman',serif;
+      --sans:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    }
+    *{box-sizing:border-box}
+    html{background:var(--bg);scroll-behavior:smooth}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);overflow-x:hidden}
+    a{color:inherit;text-decoration:none}
+    button{font:inherit}
+    .grain{position:fixed;inset:0;pointer-events:none;z-index:100;opacity:.15;mix-blend-mode:soft-light;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E")}
+    .cursor{position:fixed;width:44px;height:44px;border:1px solid rgba(255,255,255,.55);border-radius:50%;pointer-events:none;z-index:90;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s;mix-blend-mode:difference}
+    .cursor.is-active{width:74px;height:74px;background:#fff}
+    .topbar{position:fixed;inset:0 0 auto 0;z-index:40;padding:18px var(--pad);display:flex;justify-content:space-between;align-items:center;background:linear-gradient(to bottom,rgba(0,0,0,.72),transparent)}
+    .brand{font-weight:650;letter-spacing:.16em;font-size:12px}
+    .topbar nav{display:flex;gap:22px;font-size:12px;letter-spacing:.1em;text-transform:uppercase}
+    .hero{min-height:100svh;display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.72fr);align-items:end;padding:120px var(--pad) 52px;position:relative;isolation:isolate}
+    .hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 75% 22%,rgba(185,77,99,.16),transparent 36%),radial-gradient(circle at 24% 72%,rgba(255,255,255,.07),transparent 30%);z-index:-2}
+    .hero-kicker{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:22px}
+    h1{font-family:var(--serif);font-weight:400;font-size:clamp(66px,12vw,176px);line-height:.78;letter-spacing:-.07em;margin:0;max-width:8ch}
+    .hero-copy{align-self:center;max-width:38ch;margin-left:auto;color:#d4cec7;font-size:clamp(16px,1.6vw,22px);line-height:1.45}
+    .hero-copy em{font-family:var(--serif);font-size:1.2em}
+    .scroll-cue{position:absolute;left:var(--pad);bottom:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+    .manifesto{padding:14vh var(--pad) 12vh;border-top:1px solid var(--line);display:grid;grid-template-columns:.55fr 1.45fr;gap:5vw}
+    .section-label{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);padding-top:10px}
+    .manifesto p{font-family:var(--serif);font-size:clamp(34px,5vw,78px);line-height:1.02;letter-spacing:-.035em;margin:0;max-width:18ch}
+    .gallery-wrap{min-height:155vh;position:relative;border-top:1px solid var(--line);padding:10vh var(--pad)}
+    .gallery-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:10vh}
+    .gallery-head h2{font-family:var(--serif);font-size:clamp(52px,8vw,112px);font-weight:400;letter-spacing:-.06em;margin:0;line-height:.88}
+    .gallery-note{max-width:31ch;color:var(--muted);font-size:13px;line-height:1.5;text-align:right}
+    .stage{height:920px;position:relative;max-width:1500px;margin:auto}
+    .card{position:absolute;overflow:hidden;background:#141414;box-shadow:0 18px 70px rgba(0,0,0,.42);cursor:pointer;transform:translate3d(0,0,0);will-change:transform;isolation:isolate}
+    .card img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(1) contrast(1.06);transform:scale(1.04);transition:filter .6s ease,transform 1s cubic-bezier(.2,.7,.2,1)}
+    .card::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.56),transparent 48%);opacity:.75}
+    .card:hover img{filter:grayscale(.2) contrast(1.03);transform:scale(1.1)}
+    .meta{position:absolute;left:18px;right:18px;bottom:16px;z-index:2;display:flex;justify-content:space-between;gap:10px;align-items:end;font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+    .meta span:last-child{color:rgba(255,255,255,.62)}
+    .c1{width:31%;height:440px;left:2%;top:110px;rotate:-2deg}
+    .c2{width:24%;height:350px;left:39%;top:10px;rotate:1.5deg}
+    .c3{width:29%;height:500px;right:1%;top:170px;rotate:-1deg}
+    .c4{width:22%;height:330px;left:19%;bottom:20px;rotate:1.2deg}
+    .c5{width:31%;height:390px;left:48%;bottom:-10px;rotate:-1.8deg}
+    .services{padding:15vh var(--pad);border-top:1px solid var(--line)}
+    .services-grid{display:grid;grid-template-columns:.7fr 1.3fr;gap:5vw}
+    .service-list{border-top:1px solid var(--line)}
+    .service{display:grid;grid-template-columns:52px 1fr auto;gap:18px;align-items:center;padding:24px 0;border-bottom:1px solid var(--line)}
+    .service .n{color:var(--muted);font-size:11px}.service h3{margin:0;font-family:var(--serif);font-size:clamp(28px,3vw,48px);font-weight:400}.service .tag{font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;text-align:right}
+    .contact{min-height:82svh;display:flex;flex-direction:column;justify-content:space-between;padding:14vh var(--pad) 30px;border-top:1px solid var(--line);background:linear-gradient(150deg,#0b0b0b 0%,#171012 100%)}
+    .contact h2{font-family:var(--serif);font-size:clamp(64px,12vw,180px);font-weight:400;line-height:.76;letter-spacing:-.07em;margin:0;max-width:7ch}
+    .contact-row{display:flex;justify-content:space-between;align-items:end;gap:30px}.contact-row p{color:var(--muted);max-width:38ch;line-height:1.5}.contact-link{font-family:var(--serif);font-size:clamp(26px,4vw,58px);border-bottom:1px solid currentColor;padding-bottom:4px}
+    .modal{position:fixed;inset:0;z-index:70;background:rgba(8,8,8,.96);display:grid;grid-template-columns:1.25fr .75fr;opacity:0;visibility:hidden;transition:.35s ease}
+    .modal.open{opacity:1;visibility:visible}.modal-media{min-height:100vh;overflow:hidden}.modal-media img{width:100%;height:100%;object-fit:cover;filter:grayscale(.35)}
+    .modal-copy{padding:88px 7vw 50px;display:flex;flex-direction:column;justify-content:space-between}.modal-copy h3{font-family:var(--serif);font-size:clamp(50px,7vw,106px);font-weight:400;line-height:.86;letter-spacing:-.055em;margin:0}.modal-copy p{max-width:34ch;color:#c9c3bb;line-height:1.55}.close{position:absolute;right:24px;top:20px;background:none;border:0;color:white;font-size:30px;cursor:pointer}
+    .sample-badge{position:fixed;right:16px;bottom:16px;z-index:45;border:1px solid var(--line);background:rgba(10,10,10,.76);backdrop-filter:blur(10px);padding:9px 12px;font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:#ccc}
+    .reveal{opacity:0;transform:translateY(30px);transition:opacity .9s ease,transform .9s ease}.reveal.in{opacity:1;transform:none}
+    @media(max-width:800px){
+      .cursor{display:none}.topbar nav{display:none}.hero{grid-template-columns:1fr;align-content:end;gap:46px;padding-bottom:70px}.hero-copy{margin:0;max-width:30ch}.manifesto{grid-template-columns:1fr;gap:32px}.gallery-wrap{min-height:auto}.gallery-head{display:block}.gallery-note{text-align:left;margin-top:28px}.stage{height:auto;display:flex;overflow-x:auto;gap:18px;scroll-snap-type:x mandatory;padding:0 10vw 28px 0}.card{position:relative!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;rotate:0deg!important;min-width:78vw;width:78vw!important;height:64vh!important;scroll-snap-align:start}.services-grid{grid-template-columns:1fr;gap:36px}.service{grid-template-columns:36px 1fr}.service .tag{grid-column:2;text-align:left}.modal{grid-template-columns:1fr}.modal-media{min-height:55vh;height:55vh}.modal-copy{padding:34px 24px 50px;gap:30px}.contact{min-height:74svh}.contact-row{display:block}.contact-link{display:inline-block;margin-top:24px}.sample-badge{font-size:8px;right:10px;bottom:10px}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reveal{opacity:1;transform:none;transition:none}.card,.card img{transition:none!important;animation:none!important}}
+  </style>
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="cursor" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="#top">PAM CONDE</a>
+    <nav aria-label="Navegación principal"><a href="#obra">Obra</a><a href="#servicios">Servicios</a><a href="#contacto">Contacto</a></nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div>
+        <div class="hero-kicker reveal">Fotografía · dirección artística · intimidad visual</div>
+        <h1 class="reveal">Pam<br>Conde</h1>
+      </div>
+      <p class="hero-copy reveal">Imágenes que no explican: <em>dejan una herida abierta, una pregunta y una textura.</em></p>
+      <div class="scroll-cue">Desliza para entrar ↓</div>
+    </section>
+
+    <section class="manifesto">
+      <div class="section-label reveal">01 — Mirada</div>
+      <p class="reveal">Belleza vulnerable. Cuerpo, gesto y materia convertidos en memoria.</p>
+    </section>
+
+    <section id="obra" class="gallery-wrap">
+      <div class="gallery-head">
+        <h2 class="reveal">Obra<br>seleccionada</h2>
+        <p class="gallery-note reveal">Boceto de interacción. Las imágenes son de muestra y deben sustituirse por las obras originales de Pam antes de publicar la web definitiva.</p>
+      </div>
+      <div class="stage" aria-label="Galería de proyectos">
+        <article class="card c1" data-depth="1.3" data-title="Belleza herida" data-copy="Una serie sobre la fragilidad convertida en lenguaje visual." data-img="https://images.unsplash.com/photo-1524250502761-1ac6f2e30d43?auto=format&fit=crop&w=1600&q=85">
+          <img loading="lazy" src="https://images.unsplash.com/photo-1524250502761-1ac6f2e30d43?auto=format&fit=crop&w=1000&q=82" alt="Imagen artística de muestra" />
+          <div class="meta"><span>Belleza herida</span><span>01</span></div>
+        </article>
+        <article class="card c2" data-depth=".7" data-title="Cuerpo secreto" data-copy="El cuerpo aparece como un territorio incompleto: cercano, extraño y profundamente humano." data-img="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=1600&q=85">
+          <img loading="lazy" src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=1000&q=82" alt="Retrato artístico de muestra" />
+          <div class="meta"><span>Cuerpo secreto</span><span>02</span></div>
+        </article>
+        <article class="card c3" data-depth="1.6" data-title="La flor y el silencio" data-copy="Una tensión entre delicadeza, ocultación y deseo de ser vista." data-img="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=1600&q=85">
+          <img loading="lazy" src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=1000&q=82" alt="Retrato en blanco y negro de muestra" />
+          <div class="meta"><span>La flor y el silencio</span><span>03</span></div>
+        </article>
+        <article class="card c4" data-depth="1" data-title="Habitación propia" data-copy="Escenas íntimas en las que el espacio doméstico funciona como una segunda piel." data-img="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1600&q=85">
+          <img loading="lazy" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1000&q=82" alt="Retrato femenino de muestra" />
+          <div class="meta"><span>Habitación propia</span><span>04</span></div>
+        </article>
+        <article class="card c5" data-depth=".9" data-title="Materia viva" data-copy="Piel, tela, luz y sombra tratadas como una misma sustancia emocional." data-img="https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=1600&q=85">
+          <img loading="lazy" src="https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=1000&q=82" alt="Retrato editorial de muestra" />
+          <div class="meta"><span>Materia viva</span><span>05</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="servicios" class="services">
+      <div class="services-grid">
+        <div><div class="section-label reveal">02 — Posibilidades</div></div>
+        <div class="service-list reveal">
+          <div class="service"><span class="n">01</span><h3>Retrato artístico</h3><span class="tag">personas · identidad</span></div>
+          <div class="service"><span class="n">02</span><h3>Moda y editorial</h3><span class="tag">marcas · publicaciones</span></div>
+          <div class="service"><span class="n">03</span><h3>Beauty y maquillaje</h3><span class="tag">campañas · artistas</span></div>
+          <div class="service"><span class="n">04</span><h3>Dirección visual</h3><span class="tag">concepto · narrativa</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contacto" class="contact">
+      <h2 class="reveal">Hagamos<br>algo vivo.</h2>
+      <div class="contact-row reveal">
+        <p>Disponible para encargos editoriales, retratos, colaboraciones artísticas y proyectos con una identidad visual fuerte.</p>
+        <a class="contact-link" href="mailto:hola@pamconde.com">hola@pamconde.com</a>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <button class="close" aria-label="Cerrar">×</button>
+    <div class="modal-media"><img src="" alt="Vista ampliada del proyecto" /></div>
+    <div class="modal-copy"><h3></h3><div><p></p><span class="section-label">Proyecto conceptual</span></div></div>
+  </div>
+  <div class="sample-badge">Boceto · imágenes de muestra</div>
+
+  <script>
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const cursor = document.querySelector('.cursor');
+    const cards = [...document.querySelectorAll('.card')];
+    const modal = document.querySelector('.modal');
+    const modalImg = modal.querySelector('img');
+    const modalTitle = modal.querySelector('h3');
+    const modalText = modal.querySelector('p');
+
+    if(!reduced && innerWidth > 800){
+      addEventListener('pointermove', e => {
+        cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px';
+        const nx = (e.clientX / innerWidth - .5); const ny = (e.clientY / innerHeight - .5);
+        cards.forEach(card => {
+          const d = Number(card.dataset.depth || 1);
+          card.style.translate = `${nx * 18 * d}px ${ny * 14 * d}px`;
+        });
+      });
+      document.querySelectorAll('a,.card,button').forEach(el => {
+        el.addEventListener('mouseenter',()=>cursor.classList.add('is-active'));
+        el.addEventListener('mouseleave',()=>cursor.classList.remove('is-active'));
+      });
+      addEventListener('scroll',()=>{
+        const y = scrollY;
+        cards.forEach(card => {
+          const d = Number(card.dataset.depth || 1);
+          card.style.setProperty('--sy', `${(y - document.querySelector('.gallery-wrap').offsetTop) * .025 * d}px`);
+        });
+      },{passive:true});
+    }
+
+    const io = new IntersectionObserver(entries => entries.forEach(entry => {
+      if(entry.isIntersecting) entry.target.classList.add('in');
+    }),{threshold:.14});
+    document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+    function openCard(card){
+      modalImg.src = card.dataset.img;
+      modalTitle.textContent = card.dataset.title;
+      modalText.textContent = card.dataset.copy;
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden','false');
+      document.body.style.overflow='hidden';
+    }
+    cards.forEach(card=>card.addEventListener('click',()=>openCard(card)));
+    function closeModal(){modal.classList.remove('open');modal.setAttribute('aria-hidden','true');document.body.style.overflow=''}
+    modal.querySelector('.close').addEventListener('click',closeModal);
+    modal.addEventListener('click',e=>{if(e.target===modal)closeModal()});
+    addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+  </script>
+</body>
+</html>
